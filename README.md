@@ -18,6 +18,11 @@
         <script src="//unpkg.com/@@element-plus/icons-vue@@2.1.0/dist/index.iife.min.js"></script>
         <script src="/component/AgelIcon.js"></script>
         <script src="/component/AgelContextMenu.js"></script>
+        <style>
+            .custom-red-menu-item{
+                color:red;
+            }
+        </style>
     </head>
     <body>
     <div id="app">
