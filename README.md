@@ -11,7 +11,7 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="//unpkg.com/element-plus@2.3.8/dist/index.css" />
-        <link rel="stylesheet" href="/css/agel-contextmenu" />
+        <link rel="stylesheet" href="/css/AgelContextMenu.css" />
         <script type="text/javascript" src="//unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
         <script src="//unpkg.com/element-plus@2.3.8/dist/index.full.min.js"></script>
         <script src="//unpkg.com/element-plus@2.3.8/dist/locale/en.min.js"></script>
@@ -69,7 +69,8 @@
     app.component('Menu', ElementPlusIconsVue['Menu']);
     app.component('ArrowDown', ElementPlusIconsVue['ArrowDown']);
     app.component('ArrowRight', ElementPlusIconsVue['ArrowRight']);
-    app.component('AgelContextMenu', AgelContextMenu)
+    app.component('AgelContextMenu', AgelContextMenu);
+    app.mount("#app");
 </script>
 </body>
 ```
