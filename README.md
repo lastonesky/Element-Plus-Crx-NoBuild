@@ -24,7 +24,7 @@
     <div class="demo" style="height: 150px;" @contextmenu.prevent="onContextmenu($event)">
         此处使用右键触发菜单
     </div>
-    <agel-context-menu v-model="contextMenu.show" :x="contextMenu.x" :y="contextMenu.y" :menus="contextMenu.data" @@select="contextMenu.onSelect"></agel-context-menu>
+    <agel-context-menu v-model="contextMenu.show" :x="contextMenu.x" :y="contextMenu.y" :menus="contextMenu.data" @select="contextMenu.onSelect"></agel-context-menu>
     </div>
 <script>
     const app = Vue.createApp({
