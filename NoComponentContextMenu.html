@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>无组件 Element Plus 右键菜单</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-plus@2.3.8/dist/index.css" />
+    <script type="text/javascript" src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/element-plus@2.3.8/dist/index.full.min.js"></script>
+    <script src="https://unpkg.com/element-plus@2.3.8/dist/locale/en.min.js"></script>
+    <script src="https://unpkg.com/@element-plus/icons-vue@2.1.0/dist/index.iife.min.js"></script>
+    <style>
+        .demo{
+            border:1px solid gray;
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="demo" @contextmenu.prevent="onContextMenu($event)">
+            ElementPlus 没有提供右键菜单
+            <br />
+            此处使用 Element Plus 本身的组件实现右键菜单
+            <br />
+            只需要导入Element Plus即可使用
+            <br />
+            在此区域右键即可查看效果
+            <br />
+            <br />
+        </div>
+        <el-dropdown ref="ctxMenu" :style="treeMenuStyles" :teleported="false">
+            <span class="el-dropdown-link"></span>
+            <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item><el-button icon="CopyDocument" v-on:click="handleClick">Menu 1</el-button></el-dropdown-item>
+                    <el-dropdown-item divided icon="CirclePlusFilled" v-on:click="handleClick">Add Group</el-dropdown-item>
+                    <el-dropdown-item divided icon="Share" v-on:click="handleClick">Add Option</el-dropdown-item>
+                    <el-dropdown-item icon="EditPen" v-on:click="handleClick">Edit</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+        <script>
+            const app = Vue.createApp({
+                data() {
+                    return {
+                        treeMenuStyles: { top: 0, left: 0 }
+                    }
+                },
+                methods: {
+                    onContextMenu (event) {
+                        event.preventDefault();
+                        // const treeBounding = this.$refs.treeRef.$el.getBoundingClientRect();
+                        // const rowBounding = event.target.getBoundingClientRect();
+                        // const position = {
+                        //     position: 'absolute',
+                        //     left: `${event.clientX - treeBounding.left}px`,
+                        //     top: `${document.documentElement.scrollTop + rowBounding.bottom}px`
+                        // }
+                        const position = {
+                            position:'absolute',
+                            left: `${event.clientX}px`,
+                            top:`${event.clientY}px`
+                        }
+                        this.treeMenuStyles = position;
+                        this.$refs.ctxMenu.handleOpen();
+                    },
+                    handleClick () {
+                        console.log(this)
+                        this.$message({type:'success',message:"Clicked Menu"});
+                    }
+                },
+                mounted(){
+                    document.documentElement.addEventListener('click',()=>{
+                        this.$refs.ctxMenu.handleClose();
+                    })
+                }
+            })
+            app.use(ElementPlus, {
+                locale: ElementPlusLocaleEn,
+            })
+            for (let icon of ['ArrowDown', 'ArrowRight', "CirclePlusFilled", 'CopyDocument', 'Delete', 'Document', 'EditPen', 'Folder', 'Files', 'Menu', 'Plus', 'Refresh', 'Search', 'Share', 'UploadFilled']) {
+                app.component(icon, ElementPlusIconsVue[icon]);
+            }
+            app.mount("#app");
+        </script>
+    </div>
+</body>
+</html>
