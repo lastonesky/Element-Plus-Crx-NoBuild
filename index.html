@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="//unpkg.com/element-plus@2.3.8/dist/index.css" />
-    <link rel="stylesheet" href="/css/AgelContextMenu.css" />
+    <link rel="stylesheet" href="/css/agel-contextmenu.css" />
     <script type="text/javascript" src="//unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
     <script src="//unpkg.com/element-plus@2.3.8/dist/index.full.min.js"></script>
     <script src="//unpkg.com/element-plus@2.3.8/dist/locale/en.min.js"></script>
-    <script src="//unpkg.com/@@element-plus/icons-vue@@2.1.0/dist/index.iife.min.js"></script>
+    <script src="//unpkg.com/@element-plus/icons-vue@2.1.0/dist/index.iife.min.js"></script>
     <script src="/component/AgelIcon.js"></script>
     <script src="/component/AgelContextMenu.js"></script>
     <style>
+        html,body{margin:0;padding: 0;height: 100%;}
+        #app{height: 100%;}
         .custom-red-menu-item {
             color: red;
         }
@@ -20,7 +22,7 @@
 
 <body>
     <div id="app">
-        <div class="demo" style="height: 150px;" @contextmenu.prevent="onContextmenu($event)">
+        <div class="demo" style="height: 100%;" @contextmenu.prevent="onContextmenu($event)">
             此处使用右键触发菜单
         </div>
         <agel-context-menu v-model="contextMenu.show" :x="contextMenu.x" :y="contextMenu.y" :menus="contextMenu.data"
