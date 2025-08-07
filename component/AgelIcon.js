@@ -1,26 +1,54 @@
-﻿var AgelIcon = (function () {
+const AgelIcon = (function () {
+  const { computed } = Vue;
+
   function getFileTypeByUrl(url) {
-    const a = url.split(".").pop()
-    const b = a ? a.split("?")[0] : ''
-    const suffix = b.toLocaleLowerCase()
-    if (["png", "jpg", "jpeg", "bmp", "gif", 'svg'].includes(suffix)) return 'img'
-    if (["mp4", "ogg", "webm"].includes(suffix)) return 'video'
-    if (["mp3", "wav", "ogg"].includes(suffix)) return 'audio'
-  };
+    const extension = url.split('.').pop()?.toLowerCase();
+    const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
+    return imageExtensions.includes(extension) ? 'img' : 'other';
+  }
+
+  function isBase64Image(str) {
+    return /^data:image\/(png|jpe?g|gif|svg\+xml);base64,/.test(str);
+  }
     return {
-        data() {
-          return {
+      name: 'AgelIcon',
+      props: {
+        icon: [String, Object]
+      },
+      setup(props) {
+        const imgSrc = computed(() => {
+          if (typeof props.icon === 'string' && (getFileTypeByUrl(props.icon) === 'img' || isBase64Image(props.icon))) {
+            return props.icon;
           }
-        },
-        computed:{
-          isImg () {
-            return typeof this.icon == 'string' && getFileTypeByUrl(this.icon) == 'img'
+          return null;
+        });
+
+        const elIconName = computed(() => {
+          if (typeof props.icon === 'string' && window.ElementPlusIconsVue && window.ElementPlusIconsVue[props.icon]) {
+            return window.ElementPlusIconsVue[props.icon];
           }
-        },
-        props:['icon'],
-        template: /*html*/`<img v-if="isImg" :src="icon" class="el-icon" v-bind="$attrs" />
-  <el-icon v-else v-bind="$attrs">
-    <component :is="icon"></component>
-  </el-icon>`
-    }
+          return null;
+        });
+
+        const elIconComponent = computed(() => {
+          if (typeof props.icon === 'object') {
+            return props.icon;
+          }
+          return null;
+        });
+
+        return {
+          imgSrc,
+          elIconName,
+          elIconComponent
+        };
+      },
+      template: `
+        <img v-if="imgSrc" :src="imgSrc" class="el-icon" v-bind="$attrs" />
+        <el-icon v-else v-bind="$attrs">
+          <component v-if="elIconName" :is="elIconName"></component>
+          <component v-if="elIconComponent" :is="elIconComponent"></component>
+        </el-icon>
+      `
+};
 })()
