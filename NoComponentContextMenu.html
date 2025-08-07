@@ -1,89 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>无组件 Element Plus 右键菜单</title>
-    <link rel="stylesheet" href="https://unpkg.com/element-plus@2.3.8/dist/index.css" />
-    <script type="text/javascript" src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
-    <script src="https://unpkg.com/element-plus@2.3.8/dist/index.full.min.js"></script>
-    <script src="https://unpkg.com/element-plus@2.3.8/dist/locale/en.min.js"></script>
-    <script src="https://unpkg.com/@element-plus/icons-vue@2.1.0/dist/index.iife.min.js"></script>
+    <title>AgelContextMenu 非构建版本示例</title>
+    
+    <!-- Element Plus CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
+    
+    <!-- AgelContextMenu CSS -->
+    <link rel="stylesheet" href="./css/agel-contextmenu.css">
+    
     <style>
-        .demo{
-            border:1px solid gray;
-            min-height: 300px;
+        body {
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-area {
+            height: 300px;
+            border: 2px dashed #dcdfe6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .demo-area:hover {
+            border-color: #409eff;
+        }
+        
+        .demo-text {
+            color: #909399;
+            font-size: 16px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
     <div id="app">
-        <div class="demo" @contextmenu.prevent="onContextMenu($event)">
-            ElementPlus 没有提供右键菜单
-            <br />
-            此处使用 Element Plus 本身的组件实现右键菜单
-            <br />
-            只需要导入Element Plus即可使用
-            <br />
-            在此区域右键即可查看效果
-            <br />
-            <br />
+        <div class="demo-container">
+            <h1>AgelContextMenu 非构建版本示例</h1>
+            <p>这是一个可以直接在浏览器中使用的Vue 3右键菜单组件，无需构建工具。</p>
+            
+            <h2>使用方法</h2>
+            <div class="code-block">
+&lt;!-- 引入必要的依赖 --&gt;
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/element-plus/dist/index.full.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/@element-plus/icons-vue/dist/index.iife.js"&gt;&lt;/script&gt;
+&lt;script src="./AgelContextMenu.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <h2>演示</h2>
+            <p>在下面的区域右键点击试试：</p>
+            
+            <div class="demo-area" @contextmenu.prevent="showContextMenu">
+                <div class="demo-text">右键点击这里显示上下文菜单</div>
+            </div>
+            
+            <!-- 上下文菜单组件 -->
+            <agel-context-menu
+                v-model="contextMenuVisible"
+                :x="contextMenuX"
+                :y="contextMenuY"
+                :menus="contextMenus"
+                @select="handleMenuSelect"
+            ></agel-context-menu>
+            
+            <h2>菜单配置</h2>
+            <div class="code-block">
+contextMenus: [
+  {
+    title: '复制',
+    icon: 'DocumentCopy',
+    action: 'copy'
+  },
+  {
+    title: '粘贴',
+    icon: 'Document',
+    action: 'paste'
+  },
+  {
+    title: '更多操作',
+    icon: 'More',
+    children: [
+      {
+        title: '重命名',
+        icon: 'Edit',
+        action: 'rename'
+      },
+      {
+        title: '删除',
+        icon: 'Delete',
+        action: 'delete',
+        divided: true
+      }
+    ]
+  }
+]
+            </div>
+            
+            <div v-if="lastAction" style="margin-top: 20px; padding: 10px; background: #f0f9ff; border: 1px solid #409eff; border-radius: 4px;">
+                <strong>最后执行的操作：</strong> {{ lastAction }}
+            </div>
         </div>
-        <el-dropdown ref="ctxMenu" :style="treeMenuStyles" :teleported="false">
-            <span class="el-dropdown-link"></span>
-            <template #dropdown>
-                <el-dropdown-menu>
-                    <el-dropdown-item><el-button icon="CopyDocument" v-on:click="handleClick">Menu 1</el-button></el-dropdown-item>
-                    <el-dropdown-item divided icon="CirclePlusFilled" v-on:click="handleClick">Add Group</el-dropdown-item>
-                    <el-dropdown-item divided icon="Share" v-on:click="handleClick">Add Option</el-dropdown-item>
-                    <el-dropdown-item icon="EditPen" v-on:click="handleClick">Edit</el-dropdown-item>
-                </el-dropdown-menu>
-            </template>
-        </el-dropdown>
-        <script>
-            const app = Vue.createApp({
-                data() {
-                    return {
-                        treeMenuStyles: { top: 0, left: 0 }
-                    }
-                },
-                methods: {
-                    onContextMenu (event) {
-                        event.preventDefault();
-                        // const treeBounding = this.$refs.treeRef.$el.getBoundingClientRect();
-                        // const rowBounding = event.target.getBoundingClientRect();
-                        // const position = {
-                        //     position: 'absolute',
-                        //     left: `${event.clientX - treeBounding.left}px`,
-                        //     top: `${document.documentElement.scrollTop + rowBounding.bottom}px`
-                        // }
-                        const position = {
-                            position:'absolute',
-                            left: `${event.clientX}px`,
-                            top:`${event.clientY}px`
-                        }
-                        this.treeMenuStyles = position;
-                        this.$refs.ctxMenu.handleOpen();
-                    },
-                    handleClick () {
-                        console.log(this)
-                        this.$message({type:'success',message:"Clicked Menu"});
-                    }
-                },
-                mounted(){
-                    document.documentElement.addEventListener('click',()=>{
-                        this.$refs.ctxMenu.handleClose();
-                    })
-                }
-            })
-            app.use(ElementPlus, {
-                locale: ElementPlusLocaleEn,
-            })
-            for (let icon of ['ArrowDown', 'ArrowRight', "CirclePlusFilled", 'CopyDocument', 'Delete', 'Document', 'EditPen', 'Folder', 'Files', 'Menu', 'Plus', 'Refresh', 'Search', 'Share', 'UploadFilled']) {
-                app.component(icon, ElementPlusIconsVue[icon]);
-            }
-            app.mount("#app");
-        </script>
     </div>
+    
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- Element Plus -->
+    <script src="https://unpkg.com/element-plus/dist/index.full.js"></script>
+    
+    <!-- Element Plus Icons -->
+    <script src="https://unpkg.com/@element-plus/icons-vue/dist/index.iife.js"></script>
+    <script src="./component/AgelIcon.js"></script>
+    <!-- AgelContextMenu 组件 -->
+    <script src="./component/AgelContextMenu.js"></script>
+
+    
+    <script>
+        const { createApp, ref } = Vue;
+        
+        createApp({
+            components: {
+                AgelContextMenu
+            },
+            setup() {
+                const contextMenuVisible = ref(false);
+                const contextMenuX = ref(0);
+                const contextMenuY = ref(0);
+                const lastAction = ref('');
+                
+                const contextMenus = ref([
+                    {
+                        title: '复制',
+                        icon: 'DocumentCopy',
+                        action: 'copy'
+                    },
+                    {
+                        title: '粘贴',
+                        icon: 'Document',
+                        action: 'paste'
+                    },
+                    {
+                        title: '更多操作',
+                        icon: 'More',
+                        children: [
+                            {
+                                title: '重命名',
+                                icon: 'Edit',
+                                action: 'rename'
+                            },
+                            {
+                                title: '删除',
+                                icon: 'Delete',
+                                action: 'delete',
+                                divided: true
+                            },
+                            {
+                                title: '属性',
+                                icon: 'InfoFilled',
+                                action: 'properties'
+                            }
+                        ]
+                    },
+                    {
+                        title: '刷新',
+                        icon: 'Refresh',
+                        action: 'refresh',
+                        divided: true
+                    }
+                ]);
+                
+                function showContextMenu(event) {
+                    contextMenuX.value = event.clientX;
+                    contextMenuY.value = event.clientY;
+                    contextMenuVisible.value = true;
+                }
+                
+                function handleMenuSelect(menuItem) {
+                    lastAction.value = `${menuItem.title} (${menuItem.action})`;
+                    contextMenuVisible.value = false;
+                    console.log('选择了菜单项:', menuItem);
+                }
+                
+                return {
+                    contextMenuVisible,
+                    contextMenuX,
+                    contextMenuY,
+                    contextMenus,
+                    lastAction,
+                    showContextMenu,
+                    handleMenuSelect
+                };
+            }
+        }).use(ElementPlus).mount('#app');
+    </script>
 </body>
 </html>
