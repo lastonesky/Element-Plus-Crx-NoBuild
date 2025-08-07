@@ -1,26 +1,27 @@
+/* AgelContextMenu 非构建版本样式 */
 .agel-context-menu {
-    --hover-bg: var(--el-menu-hover-bg-color);
-    --hover-color: var(--el-menu-hover-text-color);
+    --hover-bg: var(--el-menu-hover-bg-color, #f5f7fa);
+    --hover-color: var(--el-menu-hover-text-color, #409eff);
     --font-size: 13px;
-  
+    padding: 5px !important;
     display: flex;
     flex-direction: column;
-    padding: 5px 5px;
     border-radius: 6px;
     user-select: none;
-    box-shadow: var(--el-box-shadow-light);
-    background-color: var(--el-bg-color);
+    box-shadow: var(--el-box-shadow-light, 0 2px 12px 0 rgba(0, 0, 0, 0.1));
+    background-color: var(--el-bg-color, #ffffff);
     min-width: 120px;
-  }
-  
-  .agel-context-menu-item {
-    position: relative;
+    z-index: 2099;
+}
+
+.agel-context-menu-item {
+    position: relative !important;
     font-size: var(--font-size);
-    color: var(--el-text-color-primary);
+    color: var(--el-text-color-primary, #303133);
     width: 100%;
-  }
-  
-  .agel-menu-item_content {
+}
+
+.agel-menu-item_content {
     display: flex;
     align-items: center;
     padding-top: 5px;
@@ -31,59 +32,78 @@
     white-space: nowrap;
     cursor: pointer;
     position: relative;
-  }
-  
-  .agel-context-menu-item.__divided {
+}
+
+.agel-context-menu-item.__divided {
     margin-bottom: 10px;
-  }
-  
-  .agel-context-menu-item.__divided::after {
-    position: absolute;
-    bottom: -5.5px;
-    left: 0;
-    display: block;
-    width: 100%;
-    height: 0;
-    content: '';
-    border-bottom: 1px solid var(--el-border-color);
-  }
-  
-  .agel-context-menu-item.__disabled {
+}
+
+    .agel-context-menu-item.__divided::after {
+        position: absolute;
+        bottom: -5.5px;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 0;
+        content: '';
+        border-bottom: 1px solid var(--el-border-color, #dcdfe6);
+    }
+
+.agel-context-menu-item.__disabled {
     cursor: not-allowed;
-    color: var(--el-disabled-text-color);
+    color: var(--el-disabled-text-color, #c0c4cc);
     pointer-events: none;
-  }
-  
-  .agel-context-menu-item:hover > :not(.agel-context-menu) {
+}
+
+.agel-context-menu-item:hover > :not(.agel-context-menu) {
     background-color: var(--hover-bg);
     color: var(--hover-color);
-  }
-  
-  .agel-context-menu-item.__hasicon > .agel-menu-item_content {
+}
+
+.agel-context-menu-item.__hasIcon > .agel-menu-item_content {
     padding-left: 25px;
-  }
-  
-  .agel-context-menu-item_remark {
-    margin-left: 25px;
+}
+
+.agel-context-menu-item.__hasChildren > .agel-menu-item_content {
+    padding-right: 20px;
+}
+
+.agel-context-menu-item_title {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.agel-context-menu-item_remark {
+    margin-left: 15px;
     font-size: 12px;
-    color: var(--el-text-color-placeholder);
-  }
-  
-  .agel-context-menu-item_icon {
+    color: var(--el-text-color-placeholder, #a8abb2);
+}
+
+.agel-context-menu-item_icon {
     position: absolute !important;
     left: 6px;
-  }
-  
-  .agel-context-menu-item_arrow {
-    right: 0px;
-  }
-  
-  .agel-context-menu-item > .agel-context-menu {
-    position: absolute;
-    left: 100%;
-    top: -5px;
-  }
-  
-  .agel-context-menu-item:hover > .agel-context-menu {
+}
+
+.agel-context-menu_arrow {
+    position: absolute !important;
+    right: 6px;
+}
+
+.agel-context-menu-item:hover > .agel-context-menu {
     display: inline-block;
-  }
+}
+
+/* Element Plus 过渡动画 */
+.el-zoom-in-top-enter-active,
+.el-zoom-in-top-leave-active {
+    opacity: 1;
+    transform: scaleY(1);
+    transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1), opacity 300ms cubic-bezier(0.23, 1, 0.32, 1);
+    transform-origin: center top;
+}
+
+.el-zoom-in-top-enter-from,
+.el-zoom-in-top-leave-to {
+    opacity: 0;
+    transform: scaleY(0);
+}
